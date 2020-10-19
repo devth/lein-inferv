@@ -12,5 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     container: clojure:lein
     steps:
-      - run: lein release
-        name: release
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: release
+        run: lein release
