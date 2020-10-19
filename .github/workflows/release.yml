@@ -15,4 +15,4 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: release
-        run: lein release
+        run: lein deploy clojars
