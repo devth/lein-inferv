@@ -13,6 +13,12 @@
        :out
        trim-newline))
 
+(def release-tasks
+  ;; release is purely derived from git sha and timestamp 😑,
+  ;; so there's no need to commit, bump, or tag anything
+  {:release-tasks [["vcs" "assert-committed"]
+                   ["deploy"]]})
+
 (defn middleware
   "Leiningen middleware that:
 
@@ -39,4 +45,6 @@
                           (java.time.format.DateTimeFormatter/ofPattern
                            "yyyyMMdd.HHmmss")
                           instant)]
-            (assoc project :version (format "%s.%s" datetime (short-ref))))))
+            (merge project
+                   release-tasks
+                   {:version (format "%s.%s" datetime (short-ref))}))))
