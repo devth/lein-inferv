@@ -14,9 +14,9 @@ There is no configuration.
    but a good indicator that the standard version in Leiningen is not used)
 1. Add to the `:plugins` vector in `project.clj`:
 
-  ```clojure
-  [lein-inferv "LATEST"]
-  ```
+   ```clojure
+   [lein-inferv "LATEST"]
+   ```
 
 1. Test it out, e.g. using [`lein
    pprint`](https://github.com/technomancy/leiningen/tree/master/lein-pprint):
