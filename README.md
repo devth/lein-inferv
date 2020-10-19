@@ -1,5 +1,13 @@
 # lein-inferv
 
+<a href="https://clojars.org/lein-inferv">
+  <img src="https://img.shields.io/clojars/v/lein-inferv?style=for-the-badge"
+    alt="lein-inferv"
+    data-canonical-src="https://img.shields.io/clojars/v/lein-inferv?style=for-the-badge"
+    style="max-width:100%;"
+  />
+</a>
+
 `lein-inferv` is a highly opinionated way of inferring version from the current
 date, time, and git version for
 [Leiningen](https://github.com/technomancy/leiningen) projects.
