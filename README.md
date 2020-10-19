@@ -7,6 +7,7 @@
     style="max-width:100%;"
   />
 </a>
+<br />
 
 `lein-inferv` is a highly opinionated way of inferring version from the current
 date, time, and git version for
