@@ -1,18 +1,23 @@
-name: Release
+name: release
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches:
+      # - master
+    pull_request:
+      # - master
 
 jobs:
 
-  lein:
+  deploy:
+
     runs-on: ubuntu-latest
     container: clojure:lein
     steps:
       - name: checkout
         uses: actions/checkout@v2
       - name: release
-        run: lein deploy clojars
+        env:
+          CLOJARS_USERNAME: ${{ secrets.CLOJARS_USERNAME }}
+          CLOJARS_PASSWORD: ${{ secrets.CLOJARS_PASSWORD }}
+        run: lein release

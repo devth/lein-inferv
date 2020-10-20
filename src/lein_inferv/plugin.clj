@@ -4,6 +4,9 @@
    [clojure.string :refer [trim-newline]]
    [clojure.java.shell :refer [sh]]))
 
+;; must be computed once in order to ensure a stable timestamp
+(def now (java.time.Instant/now))
+
 (defn has-git? [] (zero? (:exit (sh "git" "version"))))
 
 (defn has-commit? [] (zero? (:exit (sh "git" "log"))))
@@ -40,7 +43,7 @@
        "Skipping version inferrence: lein-inferv requires there to be at least 1 commit but this repo has none")
       project)
 
-    :else (let [instant (.atZone (java.time.Instant/now) java.time.ZoneOffset/UTC)
+    :else (let [instant (.atZone now java.time.ZoneOffset/UTC)
                 datetime (.format
                           (java.time.format.DateTimeFormatter/ofPattern
                            "yyyyMMdd.HHmmss")
