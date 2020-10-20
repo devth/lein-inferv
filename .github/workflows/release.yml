@@ -3,9 +3,9 @@ name: release
 on:
   push:
     branches:
-      # - master
+      - master
     pull_request:
-      # - master
+      - master
 
 jobs:
 
