@@ -1,11 +1,20 @@
 (ns lein-inferv.plugin
   (:require
    [leiningen.core.main]
-   [clojure.string :refer [trim-newline]]
+   [clojure.string :refer [blank? trim-newline]]
    [clojure.java.shell :refer [sh]]))
 
 ;; must be computed once in order to ensure a stable timestamp
-(def now (java.time.Instant/now))
+(def now-utc
+  (.atZone
+   (if (not (blank? (System/getenv "INFERV_TIMESTAMP_MS")))
+             ;; obtain timestamp from env
+     (-> (System/getenv "INFERV_TIMESTAMP_MS")
+         read-string
+         java.time.Instant/ofEpochMilli)
+             ;; or grab current
+     (java.time.Instant/now))
+   java.time.ZoneOffset/UTC))
 
 (defn has-git? [] (zero? (:exit (sh "git" "version"))))
 
@@ -21,6 +30,13 @@
   ;; so there's no need to commit, bump, or tag anything
   {:release-tasks [["vcs" "assert-committed"]
                    ["deploy"]]})
+
+(defn format-java-instant
+  [instant]
+  (.format
+   (java.time.format.DateTimeFormatter/ofPattern
+    "yyyyMMdd.HHmmss")
+   instant))
 
 (defn middleware
   "Leiningen middleware that:
@@ -43,11 +59,20 @@
        "Skipping version inferrence: lein-inferv requires there to be at least 1 commit but this repo has none")
       project)
 
-    :else (let [instant (.atZone now java.time.ZoneOffset/UTC)
-                datetime (.format
-                          (java.time.format.DateTimeFormatter/ofPattern
-                           "yyyyMMdd.HHmmss")
-                          instant)]
+    :else (let [datetime (format-java-instant now-utc)]
             (merge project
                    release-tasks
                    {:version (format "%s.%s" datetime (short-ref))}))))
+
+
+(comment
+
+
+  ;; here's an example of taking a milliseconds string, parsing into a
+  ;; java.time.Instant and formatting
+  (format-java-instant
+   (->
+    "1603926430488"
+    read-string
+    java.time.Instant/ofEpochMilli
+    (.atZone java.time.ZoneOffset/UTC))))
